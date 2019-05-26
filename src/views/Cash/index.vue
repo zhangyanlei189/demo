@@ -1,0 +1,200 @@
+<template>
+    <div id="cash">
+        <form @submit.prevent="onSubmit">
+        <div class="page-field-wrapper">
+            <div class="page-part">
+                <div class="money">
+                    <div class="label">提现金额</div>
+                    <span>￥</span><input type="text" v-model="data.money">
+                    <div class="able">可用余额：￥{{data.cash}}</div>
+                </div>
+            </div>
+            <div class="page-part">
+                <mt-field label="支付宝姓名" placeholder="请输入支付宝姓名" type="input" v-model="data.payname "></mt-field>
+                <mt-field label="支付宝账号" placeholder="请输入支付宝账号" type="input" v-model="data.payuser"></mt-field>
+            </div>
+            <div class="page-part">
+                <mt-field label="手机号" placeholder="请输入手机号" type="input" v-model="data.tel"></mt-field>
+                <mt-field label="验证码" placeholder="输入验证码" v-model="data.code">
+                    <input class="getCode" type="button" value="获取验证码" @click="getCode">
+                </mt-field>
+            </div>
+            <div class="btn-box">
+                <button class="submit">确认提交</button>
+            </div>
+        </div>
+        </form>
+        <div class="tip">温馨提示：请确认支付宝已实名认证，并填写真实姓名</div>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "cash",
+        data(){
+          return {
+              data:{
+                  money:'',
+                  cash:'',
+                  payname:'',
+                  payuser:'',
+                  tel:'',
+                  code:''
+              },
+              btnStatus:false
+          }
+        },
+        watch:{
+            btnStatus(){
+
+            }
+        },
+        activated() {
+            this.initData();
+        },
+        methods:{
+            initData(){
+                let openid = localStorage.getItem("openid");
+                console.log('fffffbbbb');
+                let vm = this;
+                this.axios.get(vm.baseUrl+'laxin/index?openid='+openid)
+                    .then(res=>{
+                        let data = res.data;
+                        if(data.code == 1){
+                            vm.data.cash = data.data.cash;
+                            vm.data.money = data.data.cash;
+                        }else{
+                            vm.$toast(data.msg);
+                        }
+                    })
+                    .catch(res=>{
+                        console.log(res);
+                        console.log('err0000');
+                    })
+            },
+            getCode(){
+              let phone = this.data.tel;
+              if(!/^1[0-9]{10}$/.test(phone)){
+                  this.$toast('请填写正确手机号');
+                  return false;
+              }
+            },
+            onSubmit(){
+                let data = this.data;
+                let money = parseFloat(data.money.replace(/,/g,""));
+                let cash = parseFloat(data.cash.replace(/,/g,""));
+                if(!money || !/^[0-9]+.?[0-9]*$/.test(money) || money>cash || money <= 0){
+                    this.$toast("请输入小于可提现金额的数字");
+                    return false;
+                }
+                if(data.payname.length<1){
+                    this.$toast("请填写支付宝姓名");
+                    return false;
+                }
+                if(data.payuser.length<1){
+                    this.$toast("请填写支付宝账号");
+                    return false;
+                }
+                if(!/^1[0-9]{10}$/.test(data.tel)){
+                    this.$toast("请填写正确的手机号");
+                    return false;
+                }
+                if(!/^[0-9]{4,}$/.test(data.tel)){
+                    this.$toast("请填写验证码");
+                    return false;
+                }
+
+                let openid = localStorage.getItem("openid");
+                data.openid = openid;
+                let vm = this;
+                this.axios.post(vm.baseUrl+'laxin/tixian',data)
+                    .then(res=>{
+                        let data = res.data;
+                        if(data.code == 1){
+                            let instance = Toast(data.msg);
+                            setTimeout(() => {
+                                instance.close();
+                                vm.$router.push('/cashrecord');
+                            }, 2000);
+                        }else{
+                            vm.$toast(data.msg);
+                        }
+                    })
+                    .catch(res=>{
+                        console.log(res);
+                        console.log('err0000');
+                    })
+
+            }
+        }
+    }
+</script>
+
+<style scoped lang="less">
+    #cash{
+        width: 100%;
+        height: 100%;
+        background: #F2F2F2;
+        box-sizing: border-box;
+        padding-top: 0.15rem;
+    }
+    .page-part{
+        margin-bottom: 0.2rem;
+        background: #fff;
+        padding-left: 20px;
+        .money{
+            text-align: left;
+            padding: 0.12rem 0;
+            .label{
+                color: #333;
+                margin-bottom: 0.12rem;
+            }
+            span,input{
+                display: inline-block;
+                vertical-align: middle;
+                color: #333;
+                font-size: 0.24rem;
+                border: none;
+                outline: none;
+            }
+            .able{
+                margin-top: 0.12rem;
+                padding-top: 0.12rem;
+                border-top: 1px solid #F2F2F2;
+                font-size: 0.12rem;
+                color: #9F9F9F;
+            }
+        }
+        .getCode{
+            outline: none;
+            border: none;
+            height: 0.27rem;
+            width: 0.7rem;
+            text-align: center !important;
+            background: #6AA7FF !important;
+            color: #fff;
+            font-size: 0.12rem;
+            border-radius: 3px;
+        }
+    }
+    .btn-box{
+        margin-top: 0.25rem;
+        button{
+            display: block;
+            margin: 0 auto;
+            background: #9F9F9F;
+            border-radius: 7px;
+            color: #fff;
+            width: 3.35rem;
+            height:0.35rem;
+            background: #9F9F9F;
+        }
+    }
+    .tip{
+        padding-left: 20px;
+        margin-top: 0.25rem;
+        text-align: left;
+        font-size: 0.12rem;
+        color: #757575;
+    }
+</style>
