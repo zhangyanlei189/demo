@@ -16,7 +16,8 @@
             <div class="page-part">
                 <mt-field label="手机号" placeholder="请输入手机号" type="input" v-model="data.tel"></mt-field>
                 <mt-field label="验证码" placeholder="输入验证码" v-model="data.code">
-                    <input class="getCode" type="button" value="获取验证码" @click="getCode">
+                    <input class="getCode" v-if="canSend" type="button" v-model="timeout" @click="getCode">
+                    <input class="getCode grey" v-else type="button" v-model="timeout">
                 </mt-field>
             </div>
             <div class="btn-box">
@@ -41,7 +42,10 @@
                   tel:'',
                   code:''
               },
-              btnStatus:false
+              btnStatus:false,
+              canSend:true,
+              timeout:"发送验证码",
+              timmer:null
           }
         },
         watch:{
@@ -68,9 +72,26 @@
                         }
                     })
                     .catch(res=>{
+                        vm.$toast('网络异常，请联系管理员');
                         console.log(res);
                         console.log('err0000');
                     })
+            },
+            set_timeout(){
+                let vm = this;
+                let time = 60;
+                this.canSend = false;
+                this.timeout = time;
+                vm.timmer = setInterval(function(){
+                    time--;
+                    if(time==-1){
+                        clearInterval(vm.timmer);
+                        vm.timeout = "发送验证码";
+                        vm.canSend = true;
+                        return false;
+                    }
+                    vm.timeout = time;
+                },1000);
             },
             getCode(){
               let phone = this.data.tel;
@@ -78,6 +99,26 @@
                   this.$toast('请填写正确手机号');
                   return false;
               }
+                let vm = this;
+                this.axios.get(vm.baseUrl+'laxin/sendsms?mobile='+phone,)
+                    .then(res=>{
+                        let data = res.data;
+                        console.log(data);
+                        console.log(6789);
+                        if(data.code == 1){
+                            let instance = vm.$toast(data.msg);
+                            setTimeout(() => {
+                                vm.set_timeout();
+                            }, 2000);
+                        }else{
+                            vm.$toast(data.msg);
+                        }
+                    })
+                    .catch(res=>{
+                        vm.$toast('网络异常，请联系管理员');
+                        console.log(res);
+                        console.log('err0000');
+                    })
             },
             onSubmit(){
                 let data = this.data;
@@ -107,20 +148,27 @@
                 let openid = localStorage.getItem("openid");
                 data.openid = openid;
                 let vm = this;
+                console.log(data);
                 this.axios.post(vm.baseUrl+'laxin/tixian',data)
                     .then(res=>{
                         let data = res.data;
                         if(data.code == 1){
-                            let instance = Toast(data.msg);
+                            let instance = vm.$toast(data.msg);
+                            console.log('kkkkk');
                             setTimeout(() => {
                                 instance.close();
-                                vm.$router.push('/cashrecord');
+                                console.log(data.data.create_at);
+                                vm.timeout = "发送验证码";
+                                vm.canSend = true;
+                                vm.timmer = null;
+                                vm.$router.push('/verify/'+data.data.created_at);
                             }, 2000);
                         }else{
                             vm.$toast(data.msg);
                         }
                     })
                     .catch(res=>{
+                        vm.$toast('网络异常，请联系管理员');
                         console.log(res);
                         console.log('err0000');
                     })
@@ -175,6 +223,9 @@
             color: #fff;
             font-size: 0.12rem;
             border-radius: 3px;
+            &.grey{
+                background: #9F9F9F !important;
+            }
         }
     }
     .btn-box{
@@ -187,7 +238,8 @@
             color: #fff;
             width: 3.35rem;
             height:0.35rem;
-            background: #9F9F9F;
+            background: #6AA7FF;
+
         }
     }
     .tip{

@@ -1,4 +1,4 @@
 const UTIL_INFO = {
-    baseUrl: "http://xc.com/api/"
+    baseUrl: "http://api.xingcheshixian.com/api/"
 }
 export default UTIL_INFO;

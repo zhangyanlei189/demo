@@ -1,10 +1,10 @@
 <template>
     <div id="verify">
         <div class="tip">正在提现，预计2天左右到账</div>
-        <div class="time">提现时间：2019.05.10 14:32</div>
+        <div class="time">提现时间：{{time}}</div>
         <div class="bg-image"></div>
         <div class="btn-box">
-            <button>确认</button>
+            <router-link to="/wallet" tag="button">确认</router-link>
         </div>
     </div>
 </template>
@@ -12,7 +12,15 @@
 <script>
 
     export default {
-        name: "verify"
+        name: "verify",
+        data(){
+            return {
+                time:''
+            }
+        },
+        activated() {
+            this.time = this.$route.params.id;
+        }
     }
 </script>
 
@@ -50,6 +58,8 @@
     .btn-box{
         margin-top: 1.12rem;
         button{
+            display: block;
+            margin: 0 auto;
             width: 3.35rem;
             height: 0.35rem;
             text-align: center;

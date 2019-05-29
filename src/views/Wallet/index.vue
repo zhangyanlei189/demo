@@ -45,8 +45,6 @@
           }
         },
         activated() {
-            localStorage.setItem("openid","admin1");
-            console.log('ddddd');
             this.initData();
         },
         methods:{
@@ -65,6 +63,7 @@
                         }
                     })
                     .catch(res=>{
+                        vm.$toast('网络异常，请联系管理员');
                         console.log(res);
                         console.log('err0000');
                     })

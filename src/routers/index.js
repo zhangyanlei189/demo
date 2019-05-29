@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from 'axios'
+import Util from './../utils/api'
+
 
 Vue.use(Router)
 
@@ -25,7 +28,7 @@ const router = new Router({
       }
     },
     {
-      path: '/verify',
+      path: '/verify/:id',
       name: 'verify',
       component: () => import('@/views/Verify'),
       meta: {
@@ -76,15 +79,47 @@ const router = new Router({
       path:'/*',
       redirect:'/wallet'
     },
-
   ]
 });
 
 router.beforeEach((to,from,next) => {
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
-  next();
+
+  console.log(from);
+  console.log('ssss');
+  // localStorage.setItem("openid","o-FbYjtm-uxOe9SkiGjrf4DoGG20");
+    var openid = localStorage.getItem("openid");
+    var reg = new RegExp("(^|&)openid=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    console.log(r);
+    if(!openid && (r && decodeURIComponent(r[2]) == openid)){
+      // localStorage.setItem("openid",decodeURIComponent(r[2]));
+      next();
+    }else {
+      axios.get(Util.baseUrl+"laxin/checklogin?wx_openid="+(openid?openid:""))
+          .then((res)=>{
+            console.log(res);
+            console.log('dddddd');
+            if(res.data.code == 1){
+              localStorage.setItem("openid",res.data.data);
+              if (to.meta.title) {
+                document.title = to.meta.title
+              }
+              next();
+            }else if (res.data.code == 2) {
+              location.href = res.data.data;
+            }
+          })
+          .catch((err)=>{
+            console.log(err)
+          });
+    }
+
+  return false;
+
+
+
+
+  // next();
 });
 
 export default router;

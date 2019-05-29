@@ -1,7 +1,7 @@
 <template>
     <div id="verify">
         <div class="tip">上传<span>当日转发文章截图</span>并过审即可获得1元现金奖励</div>
-        <div class="bg-image" :style="'background-image: url('+defaultBg+')'"><input type="file" name="imgdata" accept="image/png,image/gif,image/jpeg" @change="selectImg"></div>
+        <div class="bg-image" :style="'background-image: url('+defaultBg+')'"><input type="file" name="imgdata" accept="image/*" @change="selectImg"></div>
         <div class="btn-box">
             <button @click="update">确认提交</button>
         </div>
@@ -58,8 +58,10 @@
                 let config = {
                     headers:{'Content-Type':'multipart/form-data'}
                 };  //添加请求头
+                vm.$indicator.open('上传中...');
                 vm.axios.post(vm.baseUrl+'laxin/upload',param,config)
                     .then(res=>{
+                        vm.$indicator.close();
                         let data = res.data;
                         if(data.code == 1){
                             vm.$router.push('/auth/'+data.data);
@@ -68,6 +70,8 @@
                         }
                     })
                     .catch(res=>{
+                        vm.$indicator.close();
+                        vm.$toast('网络异常，请联系管理员');
                         console.log(res);
                         console.log('err0000');
                     })
