@@ -1,6 +1,12 @@
 <template>
     <div class="record">
-        <List v-for="itemObj in items" :itemObj="itemObj"></List>
+        <div v-if="items.length != 0">
+            <List v-for="itemObj in items" :itemObj="itemObj"></List>
+        </div>
+        <div v-else style="padding-top: 1.5rem">
+            <div class="no-data"></div>
+            <div class="no-data-tip">暂无数据</div>
+        </div>
     </div>
 </template>
 
@@ -87,13 +93,15 @@
                                     if(item.status == 1){   //1 待审   2、通过    3、拒绝
                                         item.status = 2;
                                         item.val = "提现中";
+                                        item.title ="-￥"+ item.money;
                                     }else if (item.status == 2) {
                                         item.status = 1;
                                         item.val = "已到账";
+                                        item.title ="-￥"+ item.money;
                                     }else {
                                         item.val = "提现失败";
+                                        item.title ="+￥"+ item.money;
                                     }
-                                    item.title ="￥"+ item.money;
                                     item.intro = item.created_at;
                                     item.valInfo = item.desc?item.desc:"";
                                     return item;
@@ -108,8 +116,10 @@
                                     return item;
                                 });
                             }
-                        }else {
-                            vm.$toast(data.msg);
+                        }else if (res.data.code == -1){
+                            vm.items = [];
+                        } else {
+                            vm.$toast(res.data.msg);
                         }
                     }).catch((res)=>{
                     vm.$toast('网络异常，请联系管理员');
@@ -130,5 +140,20 @@
 <style scoped>
     .record{
         padding: 0.2rem;
+    }
+    .no-data{
+        margin: 0 auto;
+        width: 1.08rem;
+        height: 1.2rem;
+        background: url("/images/image_wushuju.png") no-repeat;
+        background-size: 1.08rem 1.2rem;
+    }
+    .no-data-tip{
+        margin: 0.3rem auto;
+        padding-right: 10px;
+        width: 0.8rem;
+        font-size: 12px;
+        text-align: center;
+        color: #999;
     }
 </style>

@@ -87,14 +87,14 @@ router.beforeEach((to,from,next) => {
   console.log(from);
   console.log('ssss');
   // localStorage.setItem("openid","o-FbYjtm-uxOe9SkiGjrf4DoGG20");
-    var openid = localStorage.getItem("openid");
     var reg = new RegExp("(^|&)openid=([^&]*)(&|$)", "i");
     var r = window.location.search.substr(1).match(reg);
     console.log(r);
-    if(!openid && (r && decodeURIComponent(r[2]) == openid)){
-      // localStorage.setItem("openid",decodeURIComponent(r[2]));
+    if(r && decodeURIComponent(r[2]) ){
+      localStorage.setItem("openid",decodeURIComponent(r[2]));
       next();
     }else {
+      let openid = localStorage.getItem("openid");
       axios.get(Util.baseUrl+"laxin/checklogin?wx_openid="+(openid?openid:""))
           .then((res)=>{
             console.log(res);
@@ -106,6 +106,8 @@ router.beforeEach((to,from,next) => {
               }
               next();
             }else if (res.data.code == 2) {
+              console.log(res.data.data);
+              console.log("fffkkk")
               location.href = res.data.data;
             }
           })

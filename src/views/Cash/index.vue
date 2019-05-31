@@ -6,7 +6,8 @@
                 <div class="money">
                     <div class="label">提现金额</div>
                     <span>￥</span><input type="text" v-model="data.money">
-                    <div class="able">可用余额：￥{{data.cash}}</div>
+                    <!--<div class="able">可用余额：￥{{data.cash}}</div>-->
+                    <div class="able">提现金额需大于等于￥20.00</div>
                 </div>
             </div>
             <div class="page-part">
@@ -16,8 +17,8 @@
             <div class="page-part">
                 <mt-field label="手机号" placeholder="请输入手机号" type="input" v-model="data.tel"></mt-field>
                 <mt-field label="验证码" placeholder="输入验证码" v-model="data.code">
-                    <input class="getCode" v-if="canSend" type="button" v-model="timeout" @click="getCode">
-                    <input class="getCode grey" v-else type="button" v-model="timeout">
+                    <div class="getCode" v-if="canSend" type="button" @click="getCode">{{timeout}}</div>
+                    <div class="getCode grey" v-else type="button">{{timeout}}</div>
                 </mt-field>
             </div>
             <div class="btn-box">
@@ -124,8 +125,12 @@
                 let data = this.data;
                 let money = parseFloat(data.money.replace(/,/g,""));
                 let cash = parseFloat(data.cash.replace(/,/g,""));
-                if(!money || !/^[0-9]+.?[0-9]*$/.test(money) || money>cash || money <= 0){
+                if(!money || !/^[0-9]+.?[0-9]*$/.test(money) || money>cash){
                     this.$toast("请输入小于可提现金额的数字");
+                    return false;
+                }
+                if(money < 20){
+                    this.$toast("提现金额需大于等于￥20");
                     return false;
                 }
                 if(data.payname.length<1){
@@ -217,14 +222,15 @@
             outline: none;
             border: none;
             height: 0.27rem;
+            line-height: 0.27rem;
             width: 0.7rem;
-            text-align: center !important;
-            background: #6AA7FF !important;
+            text-align: center;
+            background: #6AA7FF;
             color: #fff;
             font-size: 0.12rem;
             border-radius: 3px;
             &.grey{
-                background: #9F9F9F !important;
+                background: #9F9F9F;
             }
         }
     }

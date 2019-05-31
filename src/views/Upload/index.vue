@@ -116,6 +116,7 @@
         background-size: contain;
         overflow: hidden;
         object-fit: cover;
+        background-position: center center;
         input{
             display: block;
             width: 100%;
