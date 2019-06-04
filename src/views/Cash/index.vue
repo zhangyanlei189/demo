@@ -215,7 +215,7 @@
                 padding-top: 0.12rem;
                 border-top: 1px solid #F2F2F2;
                 font-size: 0.12rem;
-                color: #9F9F9F;
+                color: red;
             }
         }
         .getCode{

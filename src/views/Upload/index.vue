@@ -1,6 +1,8 @@
 <template>
     <div id="verify">
         <div class="tip">上传<span>当日转发文章截图</span>并过审即可获得1元现金奖励</div>
+        <div class="tip">每天只能上传一次截图</div>
+
         <div class="bg-image" :style="'background-image: url('+defaultBg+')'"><input type="file" name="imgdata" accept="image/*" @change="selectImg"></div>
         <div class="btn-box">
             <button @click="update">确认提交</button>
@@ -97,6 +99,7 @@
         font-size: 0.14rem;
         color: #555;
         text-align: center;
+        margin-bottom: 0.14rem;
         span{
             color: #6AA7FF;
         }
