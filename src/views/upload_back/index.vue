@@ -3,9 +3,9 @@
         <div class="tip">上传<span>当日转发文章截图</span>并过审即可获得1元现金奖励</div>
         <div class="tip font-red">每天只能上传一次截图,多次上传审核不予通过</div>
 
-        <div class="bg-image" @click="wxChooseImg" :style="'background-image: url('+defaultBg+')'"><!--<input type="file" name="imgdata" accept="image/*" @change="selectImg">--></div>
+        <div class="bg-image" :style="'background-image: url('+defaultBg+')'"><input type="file" name="imgdata" accept="image/*" @change="selectImg"></div>
         <div class="btn-box">
-            <button @click="toUpload">确认提交</button>
+            <button @click="update">确认提交</button>
         </div>
         <div class="info-box">
             <Intro></Intro>
@@ -15,24 +15,19 @@
 
 <script>
     import Intro from '@/components/Intro'
-    import wxApi from '@/utils/wxApi'
     export default {
         name: "auth",
         data(){
             return {
                 defaultBg:'/images/icon_shangchuan.png',
-                file:'',
-                wxObj:{},
-                serverId:''
+                file:''
             }
         },
         components:{
             Intro
         },
         mounted(){
-            let vm = this;
             wxApi.wxRegister(function (wx) {
-                vm.wxObj = wx;
                 // 微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: '打卡活动 | 钱包', // 分享标题
@@ -56,77 +51,60 @@
                     cancel: function () {
                     }
                 });
-
             });
         },
         activated() {
             this.defaultBg = '/images/icon_shangchuan.png';
             this.file = '';
-            this.serverId = '';
         },
         methods:{
-            wxChooseImg(){
+            selectImg(e){
                 let vm = this;
-                console.log(vm.wxObj);
-                vm.wxObj.chooseImage({
-                    count: 1, // 默认9
-                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                    sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
-                    success: function (res) {
-                        console.log(res.localIds[0]);
-                        console.log("上传id--------------");
-                        if (window.__wxjs_is_wkwebview) {
-                            vm.wxObj.getLocalImgData({
-                                localId: res.localIds[0], // 图片的localID
-                                success: function (r) {
-                                    vm.defaultBg = r.localData; // localData是图片的base64数据，可以用img标签显示
-                                }
-                            });
-                        }else {
-                            vm.defaultBg = res.localIds[0];
-                        }
-                        vm.wxObj.uploadImage({
-                            localId: res.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
-                            isShowProgressTips: 1, // 默认为1，显示进度提示
-                            success: function (obj) {
-                                vm.serverId = obj.serverId; // 返回图片的服务器端ID
-                            }
-                        });
-                    }
-                });
+                let file = e.target.files[0];
+                vm.file = file;
+                console.log(file);
+                console.log('kkkfffhhh');
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+                    console.log(e.target)
+                    vm.defaultBg = e.target.result;
+                };
             },
-
-            toUpload(){
-                // return false;
+            update(e){
                 let vm = this;
-                let serveid = vm.serverId;
-                if(!serveid || serveid == ""){
+                let file = vm.file;
+                if (typeof file == "undefined" || !file) {
                     vm.$toast("请选择图片");
                     return false;
                 }
                 let openid = localStorage.getItem("openid");
+                let param = new FormData(); //创建form对象
+                param.append('imgdata',file,file.name);//通过append向form对象添加数据
+                param.append('_token','e3SBpEc2vB88QyLsLV4DKcqUNTca68jzaRToB5j8');//添加form表单中其他数据
+                param.append('openid',openid);
+                console.log(param.get('imgdata')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+                let config = {
+                    headers:{'Content-Type':'multipart/form-data'}
+                };  //添加请求头
                 vm.$indicator.open('上传中...');
-                vm.axios.post(vm.baseUrl+'laxin/testupload',{imgid:serveid,openid:openid})
-                    .then((res)=>{
-                        console.log(res);
-                        console.log("resssssssssssssssssfffffffffffffff");
+                vm.axios.post(vm.baseUrl+'laxin/upload',param,config)
+                    .then(res=>{
                         vm.$indicator.close();
                         let data = res.data;
                         if(data.code == 1){
-                            // vm.$toast(data.data.imgurl);
-                            vm.serverId = '';
-                            vm.defaultBg = '/images/icon_shangchuan.png';
                             vm.$router.push('/auth/'+data.data.time);
                         }else{
                             vm.$toast(data.msg);
                         }
                     })
-                    .catch(()=>{
+                    .catch(res=>{
                         vm.$indicator.close();
-                        vm.$toast("网络异常,请稍后重试");
+                        vm.$toast('网络异常，请联系管理员');
+                        console.log(res);
+                        console.log('err0000');
                     })
             }
-
         }
     }
 </script>

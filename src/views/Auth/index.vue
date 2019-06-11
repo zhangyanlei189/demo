@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    import wxApi from '@/utils/wxApi'
     import Intro from '@/components/Intro'
     export default {
         name: "auth",
@@ -23,6 +24,33 @@
           return {
               time:''
           }
+        },
+        mounted(){
+            wxApi.wxRegister(function (wx) {
+                // 微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: '打卡活动 | 钱包', // 分享标题
+                    link: 'http://laxin.xingcheshixian.com/', // 分享链接
+                    imgUrl: 'http://laxin.xingcheshixian.com/images/xcsx_logo.jpg', // 分享图标
+                    success: function (res) {
+                        console.log(res)
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                // 微信分享给朋友
+                wx.onMenuShareAppMessage({
+                    title: '打卡活动 | 钱包', // 分享标题
+                    desc: '转发行车视线公众号内容，每天都有现金拿！', // 分享描述
+                    link: 'http://laxin.xingcheshixian.com/', // 分享链接
+                    imgUrl: 'http://laxin.xingcheshixian.com/images/xcsx_logo.jpg', // 分享图标
+                    success: function () {
+                    },
+                    cancel: function () {
+                    }
+                });
+            });
         },
         activated() {
             this.time = this.$route.params.id;

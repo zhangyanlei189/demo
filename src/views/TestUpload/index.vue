@@ -16,6 +16,7 @@
 <script>
     import Intro from '@/components/Intro'
     import wxApi from '@/utils/wxApi'
+    import wx from 'weixin-js-sdk';
     export default {
         name: "auth",
         data(){
@@ -65,6 +66,20 @@
             this.serverId = '';
         },
         methods:{
+            selectImg(e){
+                let vm = this;
+                let file = e.target.files[0];
+                vm.file = file;
+                console.log(file);
+                console.log('kkkfffhhh');
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+                    console.log(e.target)
+                    vm.defaultBg = e.target.result;
+                };
+            },
+
             wxChooseImg(){
                 let vm = this;
                 console.log(vm.wxObj);
@@ -97,6 +112,8 @@
             },
 
             toUpload(){
+                console.log("start=============================")
+                console.log('end-kkkkkkrrrrrr=======================');
                 // return false;
                 let vm = this;
                 let serveid = vm.serverId;
@@ -125,8 +142,42 @@
                         vm.$indicator.close();
                         vm.$toast("网络异常,请稍后重试");
                     })
-            }
+            },
 
+            /*update(e){
+                let vm = this;
+                let file = vm.file;
+                if (typeof file == "undefined" || !file) {
+                    vm.$toast("请选择图片");
+                    return false;
+                }
+                let openid = localStorage.getItem("openid");
+                let param = new FormData(); //创建form对象
+                param.append('imgdata',file,file.name);//通过append向form对象添加数据
+                param.append('_token','e3SBpEc2vB88QyLsLV4DKcqUNTca68jzaRToB5j8');//添加form表单中其他数据
+                param.append('openid',openid);
+                console.log(param.get('imgdata')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+                let config = {
+                    headers:{'Content-Type':'multipart/form-data'}
+                };  //添加请求头
+                vm.$indicator.open('上传中...');
+                vm.axios.post(vm.baseUrl+'laxin/upload',param,config)
+                    .then(res=>{
+                        vm.$indicator.close();
+                        let data = res.data;
+                        if(data.code == 1){
+                            vm.$router.push('/auth/'+data.data);
+                        }else{
+                            vm.$toast(data.msg);
+                        }
+                    })
+                    .catch(res=>{
+                        vm.$indicator.close();
+                        vm.$toast('网络异常，请联系管理员');
+                        console.log(res);
+                        console.log('err0000');
+                    })
+            }*/
         }
     }
 </script>

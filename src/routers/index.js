@@ -52,6 +52,14 @@ const router = new Router({
       }
     },
     {
+      path: '/testupload',
+      name: 'upload',
+      component: () => import('@/views/TestUpload'),
+      meta: {
+        title: '上传截图'
+      }
+    },
+    {
       path: '/rewardrecord',
       name: 'rewardrecord',
       component: () => import('@/views/Record'),
@@ -115,13 +123,13 @@ router.beforeEach((to,from,next) => {
             console.log(err)
           });
     }
-
+// next()
   return false;
 
 
 
 
-  // next();
+
 });
 
 export default router;
