@@ -69,6 +69,12 @@
 .ad-box {
   width: 1018px;
   height: 90px;
+  background: #f1f1f1;
+  embed{
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .left {
@@ -281,6 +287,7 @@
     height: 105px;
 
     .slide-box-new {
+      overflow: hidden;
       height: 105px;
       width: 920px;
       margin: 0 auto;
@@ -310,8 +317,16 @@
       }
     }
 
+    .swiper-wrapper{
+      height: 105px;
+    }
     .swiper-slide {
+      background: #f2f2f5;
       padding-right: 1px;
+      padding-left: 1px;
+      float: left;
+      width: 305px;
+      height: 105px;
       &:hover {
         h4 {
           color: #366DF1;
@@ -322,11 +337,23 @@
     .img-box {
       width: 140px;
       height: 105px;
-
+      overflow: hidden;
       img {
         display: block;
         width: 100%;
         height: 100%;
+        -webkit-transition: transform 0.2s ease-out;
+        -moz-transition: transform 0.2s ease-out;
+        -ms-transition: transform 0.2s ease-out;
+        -o-transition: transform 0.2s ease-out;
+        transition: transform 0.2s ease-out;
+        &:hover{
+          -webkit-transform: scale(1.2);
+          -moz-transform: scale(1.2);
+          -ms-transform: scale(1.2);
+          -o-transform: scale(1.2);
+          transform: scale(1.2);
+        }
       }
     }
 
@@ -380,11 +407,44 @@
     .list {
       padding: 20px 0 10px;
       border-bottom: 1px solid #e8e8e8;
+      position: relative;
+      .to-top,.toutiao {
+        position: absolute;
+        top: 25px;
+        left: -11px;
+        width: 54px;
+        height: 69px;
+        z-index: 99;
+      }
+      .to-top{
+        background: url("../images/to_top.png") no-repeat;
+      }
+      .toutiao{
+        background: url("../images/toutiao.png") no-repeat;
+      }
 
       .img-box {
         position: relative;
         width: 180px;
         height: 135px;
+        overflow: hidden;
+        img{
+          display: block;
+          width: 100%;
+          height: 100%;
+          -webkit-transition: transform 0.2s ease-out;
+          -moz-transition: transform 0.2s ease-out;
+          -ms-transition: transform 0.2s ease-out;
+          -o-transition: transform 0.2s ease-out;
+          transition: transform 0.2s ease-out;
+          &:hover{
+            -webkit-transform: scale(1.2);
+            -moz-transform: scale(1.2);
+            -ms-transform: scale(1.2);
+            -o-transform: scale(1.2);
+            transform: scale(1.2);
+          }
+        }
 
         .videos-box {
           position: absolute;
@@ -396,25 +456,7 @@
           z-index: 99;
         }
 
-        .to-top {
-          position: absolute;
-          top: 5px;
-          left: -11px;
-          width: 54px;
-          height: 69px;
-          z-index: 99;
-          background: url("../images/to_top.png") no-repeat;
-        }
 
-        .toutiao{
-          position: absolute;
-          top: 5px;
-          left: -11px;
-          width: 54px;
-          height: 69px;
-          z-index: 99;
-          background: url("../images/toutiao.png") no-repeat;
-        }
       }
 
       .cont-box {
@@ -466,6 +508,9 @@
       }
 
       &.two-img {
+        .to-top,.toutiao{
+          top: 50px;
+        }
         .cont-box {
           width: 100%;
         }
@@ -500,6 +545,9 @@
       color: #366DF1;
       border: 1px solid #366DF1;
       border-radius: 4px;
+      &:hover{
+        background: #E7EEFD;
+      }
     }
   }
 
@@ -576,7 +624,7 @@
 
           .title {
             color: #333;
-            font-weight: bold;
+            font-weight: normal;
 
             &:hover {
               color: #366DF1;
@@ -590,11 +638,13 @@
 
     .wonderful {
       margin-top: 50px;
-
       .more {
         float: right;
         font-size: 14px;
-        color: #366DF1;
+        color: #999;
+        &:hover{
+          color: #366DF1;
+        }
       }
 
       .two-img {
@@ -604,7 +654,7 @@
           width: 156px;
           height: 117px;
           margin-left: 15px;
-
+          overflow: hidden;
           &:first-child {
             margin-left: 0;
           }
@@ -614,6 +664,19 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+            -webkit-transition: transform 0.2s ease-out;
+            -moz-transition: transform 0.2s ease-out;
+            -ms-transition: transform 0.2s ease-out;
+            -o-transition: transform 0.2s ease-out;
+            transition: transform 0.2s ease-out;
+            &:hover{
+              -webkit-transform: scale(1.2);
+              -moz-transform: scale(1.2);
+              -ms-transform: scale(1.2);
+              -o-transform: scale(1.2);
+              transform: scale(1.2);
+            }
           }
 
           .play-icon {
@@ -643,6 +706,7 @@
         }
 
         i {
+          padding-top: 3px;
           display: inline-block;
           font-size: 14px;
           color: #333;
@@ -783,10 +847,29 @@
                   display: block;
                   top: 10px;
                   left: 20px;
+                  overflow: hidden;
+                  img{
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    -webkit-transition: transform 0.2s ease-out;
+                    -moz-transition: transform 0.2s ease-out;
+                    -ms-transition: transform 0.2s ease-out;
+                    -o-transition: transform 0.2s ease-out;
+                    transition: transform 0.2s ease-out;
+                    &:hover{
+                      -webkit-transform: scale(1.2);
+                      -moz-transform: scale(1.2);
+                      -ms-transform: scale(1.2);
+                      -o-transform: scale(1.2);
+                      transform: scale(1.2);
+                    }
+                  }
                 }
                 .title{
                   left: 120px;
                   top: 10px;
+                  max-width: 90px;
                 }
                 .price{
                   left: 120px;
@@ -795,6 +878,8 @@
                 .iconfont{
                   top: 22px;
                   right: 2px;
+                  font-size: 10px;
+                  color: #d8d8d8;
                 }
               }
               .img-box{
@@ -818,12 +903,16 @@
                 font-size: 14px;
                 width: 93px;
                 color: #333;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
               .price{
                 font-size: 12px;
               }
               .iconfont{
                 font-size: 12px;
+                color: #d8d8d8;
               }
               .red-font{
                 color: red;
@@ -981,6 +1070,10 @@
     }
   }
 }
+
+
+
+
 
 
 

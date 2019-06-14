@@ -12,6 +12,12 @@
 .ad-box {
   width: 1018px;
   height: 90px;
+  background: #f1f1f1;
+}
+.ad-box embed {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .left {
   top: 0;
@@ -191,6 +197,7 @@
   height: 105px;
 }
 .new-calendar .new-box .slide-box-new {
+  overflow: hidden;
   height: 105px;
   width: 920px;
   margin: 0 auto;
@@ -215,8 +222,16 @@
 .new-calendar .new-box .swiper-btn.btnRight {
   right: 0px;
 }
+.new-calendar .new-box .swiper-wrapper {
+  height: 105px;
+}
 .new-calendar .new-box .swiper-slide {
+  background: #f2f2f5;
   padding-right: 1px;
+  padding-left: 1px;
+  float: left;
+  width: 305px;
+  height: 105px;
 }
 .new-calendar .new-box .swiper-slide:hover h4 {
   color: #366DF1;
@@ -224,11 +239,24 @@
 .new-calendar .new-box .img-box {
   width: 140px;
   height: 105px;
+  overflow: hidden;
 }
 .new-calendar .new-box .img-box img {
   display: block;
   width: 100%;
   height: 100%;
+  -webkit-transition: transform 0.2s ease-out;
+  -moz-transition: transform 0.2s ease-out;
+  -ms-transition: transform 0.2s ease-out;
+  -o-transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+}
+.new-calendar .new-box .img-box img:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
 }
 .new-calendar .new-box .info-box {
   margin-left: 8px;
@@ -267,11 +295,45 @@
 .content .main-list .list {
   padding: 20px 0 10px;
   border-bottom: 1px solid #e8e8e8;
+  position: relative;
+}
+.content .main-list .list .to-top,
+.content .main-list .list .toutiao {
+  position: absolute;
+  top: 25px;
+  left: -11px;
+  width: 54px;
+  height: 69px;
+  z-index: 99;
+}
+.content .main-list .list .to-top {
+  background: url("../images/to_top.png") no-repeat;
+}
+.content .main-list .list .toutiao {
+  background: url("../images/toutiao.png") no-repeat;
 }
 .content .main-list .list .img-box {
   position: relative;
   width: 180px;
   height: 135px;
+  overflow: hidden;
+}
+.content .main-list .list .img-box img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: transform 0.2s ease-out;
+  -moz-transition: transform 0.2s ease-out;
+  -ms-transition: transform 0.2s ease-out;
+  -o-transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+}
+.content .main-list .list .img-box img:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
 }
 .content .main-list .list .img-box .videos-box {
   position: absolute;
@@ -281,24 +343,6 @@
   height: 30px;
   background: url('../images/play.png') no-repeat;
   z-index: 99;
-}
-.content .main-list .list .img-box .to-top {
-  position: absolute;
-  top: 5px;
-  left: -11px;
-  width: 54px;
-  height: 69px;
-  z-index: 99;
-  background: url("../images/to_top.png") no-repeat;
-}
-.content .main-list .list .img-box .toutiao {
-  position: absolute;
-  top: 5px;
-  left: -11px;
-  width: 54px;
-  height: 69px;
-  z-index: 99;
-  background: url("../images/toutiao.png") no-repeat;
 }
 .content .main-list .list .cont-box {
   width: 440px;
@@ -352,6 +396,10 @@
 .content .main-list .list:hover h3 {
   color: #366df0;
 }
+.content .main-list .list.two-img .to-top,
+.content .main-list .list.two-img .toutiao {
+  top: 50px;
+}
 .content .main-list .list.two-img .cont-box {
   width: 100%;
 }
@@ -379,6 +427,9 @@
   color: #366DF1;
   border: 1px solid #366DF1;
   border-radius: 4px;
+}
+.content .main-list .more-btn:hover {
+  background: #E7EEFD;
 }
 .content .aside {
   width: 327px;
@@ -450,7 +501,7 @@
 }
 .content .aside .fine .right-info .art-tit .title {
   color: #333;
-  font-weight: bold;
+  font-weight: normal;
 }
 .content .aside .fine .right-info .art-tit .title:hover {
   color: #366DF1;
@@ -462,6 +513,9 @@
 .content .aside .wonderful .more {
   float: right;
   font-size: 14px;
+  color: #999;
+}
+.content .aside .wonderful .more:hover {
   color: #366DF1;
 }
 .content .aside .wonderful .two-img .img-box {
@@ -470,15 +524,28 @@
   width: 156px;
   height: 117px;
   margin-left: 15px;
+  overflow: hidden;
 }
 .content .aside .wonderful .two-img .img-box:first-child {
   margin-left: 0;
 }
 .content .aside .wonderful .two-img .img-box img {
-  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  -webkit-transition: transform 0.2s ease-out;
+  -moz-transition: transform 0.2s ease-out;
+  -ms-transition: transform 0.2s ease-out;
+  -o-transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+}
+.content .aside .wonderful .two-img .img-box img:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
 }
 .content .aside .wonderful .two-img .img-box .play-icon {
   position: absolute;
@@ -501,6 +568,7 @@
   color: #366DF1;
 }
 .content .aside .wonderful .play-list i {
+  padding-top: 3px;
   display: inline-block;
   font-size: 14px;
   color: #333;
@@ -638,10 +706,29 @@
   display: block;
   top: 10px;
   left: 20px;
+  overflow: hidden;
+}
+.content .aside .rank .tabs .tabs-list .tabs-cont li.act .img-box img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: transform 0.2s ease-out;
+  -moz-transition: transform 0.2s ease-out;
+  -ms-transition: transform 0.2s ease-out;
+  -o-transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+}
+.content .aside .rank .tabs .tabs-list .tabs-cont li.act .img-box img:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
 }
 .content .aside .rank .tabs .tabs-list .tabs-cont li.act .title {
   left: 120px;
   top: 10px;
+  max-width: 90px;
 }
 .content .aside .rank .tabs .tabs-list .tabs-cont li.act .price {
   left: 120px;
@@ -650,6 +737,8 @@
 .content .aside .rank .tabs .tabs-list .tabs-cont li.act .iconfont {
   top: 22px;
   right: 2px;
+  font-size: 10px;
+  color: #d8d8d8;
 }
 .content .aside .rank .tabs .tabs-list .tabs-cont li .img-box {
   width: 93px;
@@ -674,12 +763,16 @@
   font-size: 14px;
   width: 93px;
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .content .aside .rank .tabs .tabs-list .tabs-cont li .price {
   font-size: 12px;
 }
 .content .aside .rank .tabs .tabs-list .tabs-cont li .iconfont {
   font-size: 12px;
+  color: #d8d8d8;
 }
 .content .aside .rank .tabs .tabs-list .tabs-cont li .red-font {
   color: red;
